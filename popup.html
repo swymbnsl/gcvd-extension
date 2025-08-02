@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        width: 380px;
+        min-height: 240px;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #ffffff;
+        color: #1a1a1a;
+      }
+
+      .container {
+        padding: 24px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .logo {
+        width: 56px;
+        height: 56px;
+        background: #f9fafb;
+        border-radius: 12px;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+      }
+
+      .logo svg {
+        width: 28px;
+        height: 28px;
+        fill: #1a1a1a;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        color: #1a1a1a;
+        font-weight: 600;
+      }
+
+      .subtitle {
+        color: #6b7280;
+        font-size: 14px;
+        margin-top: 4px;
+        font-weight: 500;
+      }
+
+      .status {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .status-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 8px 0;
+      }
+
+      .status-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .status-label {
+        color: #374151;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .status-value {
+        color: #1a1a1a;
+        font-weight: 600;
+        font-size: 14px;
+        background: #ffffff;
+        padding: 4px 12px;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .instructions {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .instructions h3 {
+        margin: 0 0 16px 0;
+        font-size: 16px;
+        color: #1a1a1a;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .instructions h3::before {
+        content: "📋";
+        font-size: 18px;
+      }
+
+      .instructions ol {
+        margin: 0;
+        padding-left: 20px;
+        color: #374151;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .instructions li {
+        margin-bottom: 8px;
+        padding-left: 4px;
+      }
+
+      .button {
+        width: 100%;
+        background: #ffffff;
+        color: #1a1a1a;
+        border: 1px solid #e5e7eb;
+        padding: 14px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.2s ease;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      .button:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+      }
+
+      .button:active {
+        background: #f3f4f6;
+      }
+
+      .button:disabled {
+        background: #f9fafb;
+        color: #9ca3af;
+        cursor: not-allowed;
+        border-color: #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 16l4-4h-3V4h-2v8H8l4 4zm9-13h-6v1.99h6v14.03H3V4.99h6V3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+            />
+          </svg>
+        </div>
+        <h1>Video Downloader</h1>
+        <div class="subtitle">For Google Classroom</div>
+      </div>
+
+      <div class="status">
+        <div class="status-item">
+          <span class="status-label">Videos Detected:</span>
+          <span class="status-value" id="video-count">0</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Current Page:</span>
+          <span class="status-value" id="current-page">Unknown</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Status:</span>
+          <span class="status-value" id="status">Ready</span>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <h3>How to use:</h3>
+        <ol>
+          <li>Navigate to Google Classroom</li>
+          <li>Open a video lecture</li>
+          <li>Start playing the video</li>
+          <li>Click the "Download Video" button that appears</li>
+          <li>Select video/audio quality to open in new tab</li>
+        </ol>
+      </div>
+
+      <button class="button" id="refresh-btn">Refresh Detection</button>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

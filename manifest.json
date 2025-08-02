@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Google Classroom Video Downloader",
+  "version": "1.0",
+  "description": "Download 'view only' Google Classroom videos",
+  "permissions": ["activeTab", "storage", "webRequest", "downloads"],
+  "host_permissions": [
+    "https://classroom.google.com/*",
+    "https://drive.google.com/*",
+    "https://*.googlevideo.com/*",
+    "https://*.c.drive.google.com/*",
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://classroom.google.com/*",
+        "https://drive.google.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": [
+        "https://classroom.google.com/*",
+        "https://drive.google.com/*"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Google Classroom Video Downloader"
+  }
+}
