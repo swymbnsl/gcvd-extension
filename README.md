@@ -1,7 +1,13 @@
 # Google Classroom Video Downloader
 
-A Chrome extension to download "View Only" videos in google classroom.
-A view only file in google classroom is fetched in small chunks, with no optionn to download the whole file. This extension intercepts the network requests and manipulates the url to get back the whole file
+A Chrome extension to download "View Only" videos in google classroom and drive.
+A view only file in google drive is fetched in small chunks, with no option to download the whole file. This extension intercepts the network requests and manipulates the url to get back the whole file
+
+## See it in Action
+
+[![Video Title](https://img.youtube.com/vi/wfwGeZO0qQ4/maxresdefault.jpg)](https://youtu.be/wfwGeZO0qQ4?si=2xxdw_36wZb7oGvZ)
+
+[Watch on YouTube](https://youtu.be/wfwGeZO0qQ4?si=2xxdw_36wZb7oGvZ)
 
 ## Features
 
