@@ -88,16 +88,6 @@ Injected Script (injected.js)
 └── Video event reporting
 ```
 
-### URL Processing
-
-Google Drive serves videos in chunks with `range` parameters:
-```
-Original: ...&range=0-635401&rn=1&rbuf=0&ump=1&srfvp=1
-Processed: ...&sig=AJfQdSswRQIgEieqbgRJZmt3dkXcK-k4BM62-JL2li3TOPQfeKLPTjMCIQCn7y8hlmxRCK8rMpqTAQkPFpQ1e-BGccWYV8doYoZDIg==
-```
-
-The extension removes everything from `range` onwards to access the complete video file.
-
 ## File Structure
 
 ```
@@ -164,9 +154,6 @@ The extension removes everything from `range` onwards to access the complete vid
 - No external servers or analytics
 - All processing occurs locally in the browser
 
-## License
-
-This project is open source. Please refer to the license file for usage terms.
 
 ## Support
 
