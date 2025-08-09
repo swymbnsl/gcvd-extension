@@ -197,6 +197,21 @@
         </ol>
       </div>
 
+      <div class="instructions" id="aria2-settings" style="margin-top: 16px;">
+        <h3>Aria2 RPC Settings</h3>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+          <label style="display: grid; gap: 6px;">
+            <span style="font-size: 13px; color: #374151; font-weight: 600;">RPC URL</span>
+            <input id="aria2-url" placeholder="http://127.0.0.1:6800/jsonrpc" style="padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px;" />
+          </label>
+          <label style="display: grid; gap: 6px;">
+            <span style="font-size: 13px; color: #374151; font-weight: 600;">Token (optional)</span>
+            <input id="aria2-token" placeholder="e.g. mysecret" style="padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px;" />
+          </label>
+          <button class="button" id="save-aria2">Save Aria2 Settings</button>
+        </div>
+      </div>
+
       <button class="button" id="refresh-btn">Refresh Detection</button>
     </div>
 

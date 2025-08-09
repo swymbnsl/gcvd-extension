@@ -195,6 +195,7 @@
   border-bottom: 1px solid #f3f4f6;
   transition: background-color 0.2s ease;
   background: #ffffff;
+  gap: 16px;
 }
 
 .gcd-item:hover {
@@ -214,7 +215,6 @@
   font-weight: 500;
   color: #1a1a1a;
   font-size: 15px;
-  margin-bottom: 4px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -233,29 +233,34 @@
 /* Buttons */
 .gcd-buttons {
   display: flex;
-  gap: 8px;
-  margin-left: 16px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .gcd-open-btn,
-.gcd-download-btn {
-  padding: 8px 16px;
+.gcd-download-btn,
+.gcd-aria2-btn,
+.gcd-rename-btn {
+  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  white-space: nowrap;
 }
 
 .gcd-open-btn svg,
-.gcd-download-btn svg {
-  width: 14px;
-  height: 14px;
+.gcd-download-btn svg,
+.gcd-aria2-btn svg,
+.gcd-rename-btn svg {
+  width: 12px;
+  height: 12px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -283,6 +288,29 @@
 .gcd-download-btn:hover {
   background: #047857;
   border-color: #047857;
+}
+
+.gcd-aria2-btn {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+}
+
+.gcd-aria2-btn:hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
+}
+
+.gcd-rename-btn {
+  background: #ffffff;
+  color: #374151;
+  border-color: #e5e7eb;
+}
+
+.gcd-rename-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #1a1a1a;
 }
 
 /* Footer */

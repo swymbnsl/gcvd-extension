@@ -4,9 +4,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentPageEl = document.getElementById("current-page");
   const statusEl = document.getElementById("status");
   const refreshBtn = document.getElementById("refresh-btn");
+  const aria2UrlInput = document.getElementById('aria2-url');
+  const aria2TokenInput = document.getElementById('aria2-token');
+  const saveAria2Btn = document.getElementById('save-aria2');
 
   function showUserError(msg) {
     alert(msg);
+  }
+
+  function loadAria2Settings() {
+    try {
+      chrome.storage.sync.get(['aria2Url', 'aria2Token'], (res) => {
+        if (aria2UrlInput) aria2UrlInput.value = res.aria2Url || 'http://127.0.0.1:6800/jsonrpc';
+        if (aria2TokenInput) aria2TokenInput.value = res.aria2Token || '';
+      });
+    } catch (e) {}
+  }
+
+  function saveAria2Settings() {
+    const aria2Url = aria2UrlInput?.value?.trim() || '';
+    const aria2Token = aria2TokenInput?.value?.trim() || '';
+    try {
+      chrome.storage.sync.set({ aria2Url, aria2Token }, () => {
+        if (chrome.runtime.lastError) {
+          console.error('Failed to save aria2 settings', chrome.runtime.lastError);
+          showUserError('Failed to save settings.');
+        } else {
+          alert('Aria2 settings saved');
+        }
+      });
+    } catch (e) {
+      showUserError('Failed to save settings.');
+    }
   }
 
   function updatePopup() {
@@ -90,6 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  if (saveAria2Btn) {
+    saveAria2Btn.addEventListener('click', saveAria2Settings);
+  }
+
+  loadAria2Settings();
   updatePopup();
   setInterval(updatePopup, 2000);
 });

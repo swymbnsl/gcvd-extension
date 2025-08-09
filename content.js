@@ -1,6 +1,8 @@
 let downloadButton = null;
 let detectedUrls = [];
 let isVideoPlaying = false;
+// Store custom filenames for each video item
+let customFilenames = new Map();
 
 function injectScript() {
   try {
@@ -248,6 +250,21 @@ function createDownloadItem(urlData) {
         </svg>
         Download
       </button>
+      <button class="gcd-aria2-btn" title="Send to aria2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13"/>
+          <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+        aria2
+      </button>
+      <button class="gcd-rename-btn" title="Send to aria2 with rename">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17v2a2 2 0 0 0 2 2h2"/>
+          <path d="M7 7h.01"/>
+          <path d="M3 3h18v18H3z"/>
+        </svg>
+        rename
+      </button>
     </div>
   `;
 
@@ -262,8 +279,54 @@ function createDownloadItem(urlData) {
     .querySelector(".gcd-download-btn")
     .addEventListener("click", (e) => {
       e.preventDefault();
-      downloadVideo(urlData.url, urlData.type);
+      downloadVideo(urlData.url, urlData.type, urlData.id, urlData.itag);
     });
+
+  const aria2Btn = item.querySelector('.gcd-aria2-btn');
+  aria2Btn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      // Check if there's a custom filename for this video
+      const key = `${urlData.id}_${urlData.type}_${urlData.itag}`;
+      const customFilename = customFilenames.get(key);
+      
+      const res = await chrome.runtime.sendMessage({
+        action: 'sendToAria2',
+        id: urlData.id,
+        type: urlData.type,
+        itag: urlData.itag,
+        filename: customFilename // Use stored filename if available
+      });
+      if (res && res.success) {
+        showNotification('Sent to aria2', 'success');
+      } else {
+        showNotification(res?.error || 'Failed to send to aria2', 'error');
+      }
+    } catch (err) {
+      showNotification('Failed to send to aria2', 'error');
+    }
+  });
+
+  const renameBtn = item.querySelector('.gcd-rename-btn');
+  renameBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      const defaultName = getSuggestedFilename(urlData.type);
+      const name = prompt('Enter filename for download:', defaultName);
+      
+      if (!name) {
+        return;
+      }
+      
+      // Store the custom filename for this video item
+      const key = `${urlData.id}_${urlData.type}_${urlData.itag}`;
+      customFilenames.set(key, name);
+      
+      showNotification('Filename saved: ' + name, 'success');
+    } catch (err) {
+      showNotification('Failed to save filename', 'error');
+    }
+  });
 
   return item;
 }
@@ -284,6 +347,32 @@ function getQualityFromItag(itag) {
   return qualities[itag] || `Quality ${itag}`;
 }
 
+function getSuggestedFilename(type) {
+  try {
+    // Get current tab title for contextual naming
+    const currentTab = window.location.href;
+    let filename = `lecture_${type}_${Date.now()}`;
+    
+    // Try to get page title from document
+    if (document.title) {
+      const cleanTitle = document.title
+        .replace(/[<>:"/\\|?*]/g, '')
+        .replace(/\s+/g, '_')
+        .substring(0, 50);
+      if (cleanTitle) {
+        filename = `${cleanTitle}_${type === 'video' ? 'Video' : 'Audio'}_${Date.now()}`;
+      }
+    }
+    
+    const extension = type === 'video' ? 'mp4' : 'mp3';
+    return `${filename}.${extension}`;
+  } catch (e) {
+    // Fallback to simple naming
+    const extension = type === 'video' ? 'mp4' : 'mp3';
+    return `lecture_${type}_${Date.now()}.${extension}`;
+  }
+}
+
 function openVideo(url, type) {
   chrome.runtime.sendMessage({
     action: "openVideoInNewTab",
@@ -301,11 +390,16 @@ function openVideo(url, type) {
   });
 }
 
-function downloadVideo(url, type) {
+function downloadVideo(url, type, id, itag) {
+  // Check if there's a custom filename for this video
+  const key = `${id}_${type}_${itag}`;
+  const customFilename = customFilenames.get(key);
+  
   chrome.runtime.sendMessage({
     action: "downloadVideo",
     url: url,
-    type: type
+    type: type,
+    customFilename: customFilename
   }, (response) => {
     if (chrome.runtime.lastError) {
       console.error("Failed to download video", chrome.runtime.lastError);

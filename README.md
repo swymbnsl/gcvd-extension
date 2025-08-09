@@ -1,7 +1,7 @@
 # Google Classroom Video Downloader
 
 A Chrome extension to download "View Only" videos in google classroom and drive.
-A view only file in google drive is fetched in small chunks, with no option to download the whole file. This extension intercepts the network requests and manipulates the url to get back the whole file
+A view only file in google drive is fetched in small chunks, with no option to download the whole file. This extension intercepts the network requests and manipulates the url to get back the whole file. The extension seemlessly integrates with Aria2 to download your files a lot faster than usual chrome downloads. 
 
 ## See it in Action
 
@@ -9,15 +9,6 @@ A view only file in google drive is fetched in small chunks, with no option to d
 
 [Watch on YouTube](https://youtu.be/wfwGeZO0qQ4?si=2xxdw_36wZb7oGvZ)
 
-## Features
-
-- **Automatic Video Detection**: Detects video streams from Google Classroom and Google Drive
-- **Smart URL Processing**: Removes chunked delivery parameters to access full video files
-- **Multiple Quality Options**: Supports various video and audio quality streams
-- **Dual Action Interface**: Open videos in new tabs or download directly
-- **Video Page Integration**: Direct download button on opened video pages
-- **Clean User Interface**: Minimal, professional design with real-time updates
-- **Error Handling**: User-friendly error notifications and graceful failure recovery
 
 ## Installation
 
@@ -31,8 +22,8 @@ A view only file in google drive is fetched in small chunks, with no option to d
 ### Permissions
 The extension requires the following permissions:
 - `activeTab`: Access to current tab information
-- `storage`: Temporary storage of detected video URLs
-- `webRequest`: Network request interception for video detection
+- `storage`: Persistent storage of aria2 settings and custom filenames
+- `webRequest`: Network request interception for video detection and header capture
 - `downloads`: File download functionality
 
 ## Usage
@@ -42,7 +33,39 @@ The extension requires the following permissions:
 2. Play or load any video on the page
 3. A floating download button will appear in the top-right corner
 4. Click the button to see available video and audio streams
-5. Choose to "Open" (new tab) or "Download" any stream
+5. Choose from 4 action buttons for each stream
+
+### Action Buttons
+Each detected video/audio stream offers 4 options:
+
+- **🔵 Open** - Opens video in new tab for direct viewing
+- **🟢 Download** - Downloads via browser with custom filename support
+- **🟣 aria2** - Sends directly to aria2 RPC for ultra-fast downloads
+- **⚪ rename** - Set custom filename for future downloads
+
+### Custom Filename Management
+1. Click **"rename"** on any stream
+2. Enter your desired filename (e.g., "Lecture_1_Introduction.mp4")
+3. Click OK - filename is saved for that specific stream
+4. Use **"Download"** or **"aria2"** - both will use your custom filename
+
+### Aria2 RPC Setup
+For maximum download speeds:
+
+1. **Install aria2** on your machine from https://aria2.github.io/
+2. **Start aria2 RPC server**:
+   ```bash
+   # Without token
+   aria2c --enable-rpc --rpc-listen-all=true --rpc-allow-origin-all
+   
+   # With token (recommended)
+   aria2c --enable-rpc --rpc-listen-all=true --rpc-allow-origin-all --rpc-secret=YOUR_TOKEN
+   ```
+3. **Configure extension**:
+   - Open extension popup
+   - Set custom RPC URL if needed: `http://127.0.0.1:6800/jsonrpc` ()
+   - Set Token: `YOUR_TOKEN` (if using token)
+   - Click "Save Aria2 Settings"
 
 ### Video Page Download
 - When you open a video in a new tab via the extension
@@ -54,52 +77,12 @@ The extension detects multiple quality options:
 - **Video**: 1080p, 720p, 480p, 360p, 240p
 - **Audio**: 128kbps AAC, 256kbps AAC, WebM Audio
 
-## Technical Overview
 
-### How It Works
 
-The extension operates through a multi-layered detection system:
 
-1. **Network Interception**: Background script monitors network requests for Google Drive video URLs
-2. **URL Processing**: Removes `range` parameters and subsequent parameters to access full video files
-3. **Content Injection**: Enhanced detection script runs in page context for comprehensive video monitoring
-4. **UI Management**: Content script creates and manages the user interface
-5. **Action Handling**: Background script coordinates downloads and tab opening
 
-### Architecture
 
-```
-Background Script (background.js)
-├── Network request interception
-├── URL cleaning and processing
-├── Video data storage
-└── Download/tab creation coordination
 
-Content Script (content.js)
-├── UI creation and management
-├── User interaction handling
-├── Message passing to background
-└── Video page detection
-
-Injected Script (injected.js)
-├── Enhanced video element detection
-├── XHR/Fetch request monitoring
-├── DOM mutation observation
-└── Video event reporting
-```
-
-## File Structure
-
-```
-├── manifest.json          # Extension configuration
-├── background.js          # Service worker for network monitoring
-├── content.js            # Content script for UI management
-├── injected.js           # Enhanced video detection
-├── popup.html            # Extension popup interface
-├── popup.js              # Popup functionality
-├── styles.css            # UI styling
-└── README.md            # This file
-```
 
 ## Troubleshooting
 
@@ -120,6 +103,12 @@ Injected Script (injected.js)
 - Ensure sufficient disk space
 - Try opening in new tab instead
 
+**aria2 not working**
+- Verify aria2 RPC server is running
+- Check RPC URL and token in extension settings
+- Ensure aria2 is accessible from browser (no firewall blocking)
+- Check aria2 logs for connection errors
+
 **Extension not working**
 - Reload the extension in `chrome://extensions/`
 - Clear browser cache and cookies
@@ -131,6 +120,8 @@ Injected Script (injected.js)
 - "Could not open video" - Tab creation failed
 - "Failed to download video" - Download API or file system issue
 - "Video detection failed" - Script injection or DOM access issue
+- "Aria2 RPC URL not configured" - Set aria2 settings in popup
+- "Aria2 error: [message]" - Check aria2 server status and configuration
 
 ## Development
 
@@ -143,6 +134,9 @@ Injected Script (injected.js)
 ### Key Components
 
 - **URL Cleaning**: `cleanVideoUrl()` function in background.js
+- **Header Capture**: `normalizeHeadersArray()` for complete request capture
+- **aria2 Integration**: `sendToAria2()` with optimized settings
+- **Filename Management**: Custom filename storage in content.js
 - **Video Detection**: Multi-layered approach across all scripts
 - **UI Management**: Event-driven updates in content.js
 - **Error Handling**: User-friendly notifications with internal logging
@@ -151,9 +145,10 @@ Injected Script (injected.js)
 
 - No personal data is collected or transmitted
 - Video URLs are stored temporarily and automatically cleaned
+- Custom filenames stored locally in browser memory
+- aria2 settings stored in Chrome sync storage (encrypted)
 - No external servers or analytics
 - All processing occurs locally in the browser
-
 
 ## Support
 
