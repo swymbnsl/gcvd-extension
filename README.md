@@ -57,13 +57,14 @@ For maximum download speeds:
    ```bash
    # Without token
    aria2c --enable-rpc --rpc-listen-all=true --rpc-allow-origin-all
-   
+   ```
+   ```bash
    # With token (recommended)
    aria2c --enable-rpc --rpc-listen-all=true --rpc-allow-origin-all --rpc-secret=YOUR_TOKEN
    ```
 3. **Configure extension**:
    - Open extension popup
-   - Set custom RPC URL if needed: `http://127.0.0.1:6800/jsonrpc` ()
+   - Set custom RPC URL if needed: `http://127.0.0.1:6800/jsonrpc`
    - Set Token: `YOUR_TOKEN` (if using token)
    - Click "Save Aria2 Settings"
 
