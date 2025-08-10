@@ -5,9 +5,9 @@ A view only file in google drive is fetched in small chunks, with no option to d
 
 ## See it in Action
 
-[![Video Title](https://img.youtube.com/vi/wfwGeZO0qQ4/maxresdefault.jpg)](https://youtu.be/wfwGeZO0qQ4?si=2xxdw_36wZb7oGvZ)
+[![Video Title](https://img.youtube.com/vi/Kkap1xgJJPQ/maxresdefault.jpg)](https://youtu.be/Kkap1xgJJPQ)
 
-[Watch on YouTube](https://youtu.be/wfwGeZO0qQ4?si=2xxdw_36wZb7oGvZ)
+[Watch on YouTube](https://youtu.be/Kkap1xgJJPQ)
 
 
 ## Installation
@@ -77,13 +77,6 @@ For maximum download speeds:
 The extension detects multiple quality options:
 - **Video**: 1080p, 720p, 480p, 360p, 240p
 - **Audio**: 128kbps AAC, 256kbps AAC, WebM Audio
-
-
-
-
-
-
-
 
 ## Troubleshooting
 
